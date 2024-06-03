@@ -16,6 +16,15 @@ public class Employee {
     private String lname;
     private int age;
 
+    public Employee() {
+        // Default constructor
+    }
+    public Employee(String fname, String lname, int age) {
+        this.fname = fname;
+        this.lname = lname;
+        this.age = age;
+    }
+
     public int getId() {
         return Id;
     }

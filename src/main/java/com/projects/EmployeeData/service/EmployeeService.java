@@ -13,6 +13,9 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository repo;
 
+    public EmployeeService(EmployeeRepository repo) {
+    }
+
     public Employee createEmployee(Employee employee){
         return repo.save(employee);
     }
@@ -40,7 +43,7 @@ public class EmployeeService {
     }
     public String deleteEmployee(int id){
         repo.deleteById(id);
-        return "Employee" + id + "deleted";
+        return "Success";
     }
 
     public List<Employee> getEmployeeByName(String name) {
