@@ -1,51 +1,59 @@
 package com.projects.EmployeeData.controller;
-
+import com.projects.EmployeeData.dto.EmployeeRequest;
 import com.projects.EmployeeData.entity.Employee;
 import com.projects.EmployeeData.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @ResponseBody
 @Controller
+@RequestMapping("/employee/v1")
 public class EmployeeController {
     private static final Logger logInfo = LoggerFactory.getLogger(EmployeeController.class);
-    @Autowired
     private EmployeeService service;
-    @GetMapping("/employees")
-    public List<Employee> getEmployeeList(){
-        logInfo.info("Get employee list method is called");
+    public EmployeeController(EmployeeService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Object>> getEmployeeList(){
         return service.getEmployeeList();
     }
-    @GetMapping("/employee/{id}")
-    public Employee getEmployeeById(@PathVariable int id){
-        return service.getEmployeeById(id);
+    @GetMapping(value = "/",params = "id")
+    public ResponseEntity<Object> getEmployeeById(@RequestParam int id){
+         return service.getEmployeeById(id);
     }
-    @GetMapping("/employeeByName/{name}")
-    public List<Employee> getEmployeeByName(@PathVariable("name") String name){
+    @GetMapping(value = "/",params = "name")
+    public ResponseEntity<List<Object>> getEmployeeByName(@RequestParam String name){
         return service.getEmployeeByName(name);
     }
-    @GetMapping("/employees/{age}")
-    public List<Employee> getEmployeeByAge(@PathVariable("age") int age){
+
+    @GetMapping(value = "/",params = "age")
+    public ResponseEntity<List<Object>> getEmployeeByAge(@RequestParam int age){
         return service.getEmployeeByAge(age);
     }
-    @PostMapping("/employee")
-    public Employee createEmployee(@RequestBody Employee employee){
-        return service.createEmployee(employee);
+
+    @PostMapping("/")
+    public ResponseEntity<Object> createEmployee(@RequestBody @Valid EmployeeRequest employeeRequest,BindingResult result){
+        return service.createEmployee(employeeRequest,result);
     }
     @PostMapping("/employees")
-    public List<Employee> createEmployeeList(@RequestBody List<Employee> employees){
-        return service.createEmployeeList(employees);
+    public ResponseEntity<List<Object>> createEmployeeList(@RequestBody @Valid List<EmployeeRequest> employeesRequest,BindingResult result){
+        return service.createEmployeeList(employeesRequest,result);
     }
-    @PutMapping("/employee/{id}")
-    public Employee updateEmployee(@PathVariable("id") int id,@RequestBody Employee employee){
-        return service.updateEmployee(employee,id);
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateEmployee(@PathVariable("id") int id,@RequestBody @Valid Employee employee){
+        return service.updateEmployee(id,employee);
     }
-    @DeleteMapping("/employee/{id}")
-    public String deleteEmployee(@PathVariable("id") int id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteEmployee(@PathVariable("id") int id){
         return service.deleteEmployee(id);
     }
 }

@@ -1,25 +1,26 @@
-package com.projects.EmployeeData.entity;
+package com.projects.EmployeeData.dto;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
-@Entity
-@Table(name = "employee")
+@Data
 @AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
-@Data
-public class Employee {
-    @Id
-    @GeneratedValue
+
+public class EmployeeRequest {
     private int Id;
-    @Column(name = "firstName")
+    @NotBlank(message = "First Name should not be null")
     private String fname;
-    @Column(name = "lastName")
+    @NotBlank(message ="Last Name should not be null" )
     private String lname;
+    @Min(value = 15,message = "Employee age should be above 15")
+    @Max(value = 50,message = "Employee should be below 50")
     private int age;
 
     public int getId() {
@@ -52,15 +53,5 @@ public class Employee {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "Id=" + Id +
-                ", fname='" + fname + '\'' +
-                ", lname='" + lname + '\'' +
-                ", age=" + age + '}';
     }
 }

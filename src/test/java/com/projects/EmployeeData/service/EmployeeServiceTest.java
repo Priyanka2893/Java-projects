@@ -1,5 +1,6 @@
 package com.projects.EmployeeData.service;
 
+import com.projects.EmployeeData.dto.EmployeeRequest;
 import com.projects.EmployeeData.entity.Employee;
 import com.projects.EmployeeData.repo.EmployeeRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -8,11 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
-import org.mockito.Answers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,16 +31,25 @@ class EmployeeServiceTest {
     @InjectMocks
     private EmployeeService service;
     AutoCloseable autoCloseable;
+    EmployeeRequest employeeRequest1;
+    EmployeeRequest employeeRequest2;
+    List<EmployeeRequest> employeeRequestList = new ArrayList<>();
     Employee employeeOne;
     Employee employeeTwo;
     List<Employee> employeeList = new ArrayList<>();
+    BindingResult result;
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        employeeOne = new Employee("Priyanka","Shaktawat",29);
-        employeeTwo = new Employee("Sanjay","Singh",35);
+        employeeOne = Employee.build(0,"Priyanka","Shaktawat",29);
+        employeeTwo = Employee.build(1,"Sanjay","Singh",35);
         employeeList.add(employeeOne);
         employeeList.add(employeeTwo);
+        employeeRequest1 = EmployeeRequest.build(0,"Priyanka","Shaktawat",29);
+        employeeRequest2 = EmployeeRequest.build(1,"Sanjay","Singh",35);
+        employeeRequestList.add(employeeRequest1);
+        employeeRequestList.add(employeeRequest2);
+
 
     }
 
@@ -52,14 +60,14 @@ class EmployeeServiceTest {
 
     @Test
     void testCreateEmployee() {
-        when(repo.save(employeeOne)).thenReturn(employeeOne);
-        assertThat(service.createEmployee(employeeOne)).isEqualTo(employeeOne);
+        when(repo.save(Mockito.any())).thenReturn(employeeRequest1);
+        assertThat(service.createEmployee(employeeRequest1,result)).isEqualTo(employeeRequest1);
     }
 
     @Test
     void createEmployeeList() {
         when(repo.saveAll(employeeList)).thenReturn(employeeList);
-        List<Employee> savedEmployees = service.createEmployeeList(employeeList);
+        List<Employee> savedEmployees = service.createEmployeeList(employeeRequestList,result);
         assertNotNull(savedEmployees);
         assertEquals(employeeList.size(), savedEmployees.size());
     }

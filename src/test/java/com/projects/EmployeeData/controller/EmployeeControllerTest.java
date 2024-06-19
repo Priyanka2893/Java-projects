@@ -34,8 +34,8 @@ class EmployeeControllerTest {
 
     @BeforeEach
     void setUp() {
-        employeeOne = new Employee("Priyanka","Shaktawat",29);
-        employeeTwo = new Employee("Sanjay","Singh",35);
+        employeeOne = Employee.build(0,"Priyanka","Shaktawat",29);
+        employeeTwo = Employee.build(1,"Sanjay","Singh",35);
         employeeList.add(employeeOne);
         employeeList.add(employeeTwo);
     }
