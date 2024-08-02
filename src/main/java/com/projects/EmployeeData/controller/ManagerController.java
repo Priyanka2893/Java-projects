@@ -1,7 +1,7 @@
 package com.projects.EmployeeData.controller;
 
 import com.projects.EmployeeData.entity.Managers;
-import com.projects.EmployeeData.service.ManagerService;
+import com.projects.EmployeeData.service.impl.ManagerServiceDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import java.util.List;
 @Controller
 public class ManagerController {
     @Autowired
-    private ManagerService service;
+    private ManagerServiceDaoImpl service;
 
     @GetMapping("/managers")
     public List<Managers> getManagerList(){
